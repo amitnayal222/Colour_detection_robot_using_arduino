@@ -1,0 +1,123 @@
+#define S0 3
+#define S1 4
+#define S2 5
+#define S3 6
+#define sensorOut 2
+int motor_left[] = {7,8};
+int motor_right[] = {9,10};
+int r, g , b = 0;
+void setup()
+{
+int i;
+for (i=0;i<2;i++)
+{
+pinMode(motor_left[i],OUTPUT);
+pinMode(motor_right[i],OUTPUT);
+}
+pinMode(S0,OUTPUT);
+pinMode(S1,OUTPUT);
+pinMode(S2,OUTPUT);
+pinMode(S3,OUTPUT);
+pinMode(sensorOut, INPUT);
+
+digitalWrite(S0,HIGH);
+digitalWrite(S1,LOW);
+Serial.begin(9600);
+}
+void loop()
+{
+digitalWrite(S2,LOW);
+digitalWrite(S3,LOW);
+r = pulseIn(sensorOut,LOW);
+Serial.print("R=");
+Serial.print(r);
+Serial.print("");
+delay(100);
+digitalWrite(S2,HIGH);
+digitalWrite(S3,HIGH);
+g = pulseIn(sensorOut,LOW);
+Serial.print("G=");
+Serial.print(g);
+Serial.print("");
+digitalWrite(S2,LOW);
+digitalWrite(S3,HIGH);
+b = pulseIn(sensorOut,LOW);
+Serial.print("B=");
+Serial.print(b);
+Serial.print("");
+delay(100);
+//drive_forward();
+if(r>190 && r<=250)
+{
+motor_stop();
+//Serial.println("3");
+delay(1000);
+//drive_forward();
+}
+else if (b>300 && b<=370)
+{
+delay(1000);
+turn_left();
+delay(1000);
+//motor_stop();
+//Serial.println("4");
+
+}
+
+else if (g>50 && g<=140)
+{
+turn_right();
+delay(1000);
+//motor_stop();
+//Serial.println("4");
+
+}
+
+else
+{
+drive_forward();
+delay(1000);
+//motor_stop();
+//Serial_println("1");
+}
+}
+void motor_stop()
+{
+digitalWrite(motor_left[0],LOW);
+digitalWrite(motor_left[1],LOW);
+digitalWrite(motor_right[0],LOW);
+digitalWrite(motor_right[1],LOW);
+delay(25);
+}
+
+void drive_forward()
+{
+digitalWrite(motor_left[0],HIGH);
+digitalWrite(motor_left[1],LOW);
+digitalWrite(motor_right[0],HIGH);
+digitalWrite(motor_right[1],LOW);
+}
+
+void drive_backward()
+{
+digitalWrite(motor_left[0],LOW);
+digitalWrite(motor_left[1],HIGH);
+digitalWrite(motor_right[0],LOW);
+digitalWrite(motor_right[1],HIGH);
+}
+
+void turn_left()
+{
+digitalWrite(motor_left[0],LOW);
+digitalWrite(motor_left[1],HIGH);
+digitalWrite(motor_right[0],HIGH);
+digitalWrite(motor_right[1],LOW);
+}
+void turn_right()
+{
+digitalWrite(motor_left[0],HIGH);
+digitalWrite(motor_left[1],LOW);
+digitalWrite(motor_right[0],LOW);
+digitalWrite(motor_right[1],HIGH);
+}
+
